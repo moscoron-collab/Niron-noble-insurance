@@ -130,6 +130,34 @@ tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border)
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:#00c97a22;border:1px solid var(--active);color:var(--active);font-family:var(--fm);font-size:12px;padding:10px 18px;border-radius:6px;display:none;z-index:999;animation:fadein .3s}
+/* AI CHAT */
+.ai-btn-wrap{position:fixed;bottom:28px;left:28px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:998}
+.ai-btn{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#00BFFF,#0080cc);border:none;cursor:pointer;font-size:22px;box-shadow:0 4px 20px #00BFFF44;transition:transform .2s;position:relative}
+.ai-btn:hover{transform:scale(1.1)}
+.ai-btn:hover .ai-tip{opacity:1;transform:translateY(0)}
+.ai-tip{position:absolute;bottom:58px;left:50%;transform:translateX(-50%) translateY(4px);background:#0d1825;border:1px solid var(--accent);color:var(--accent);font-family:var(--fm);font-size:10px;white-space:nowrap;padding:6px 12px;border-radius:6px;opacity:0;transition:all .2s;pointer-events:none;letter-spacing:.5px}
+.ai-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--accent)}
+.ai-label{font-family:var(--fm);font-size:9px;letter-spacing:.5px;color:var(--muted);text-align:center;white-space:nowrap;line-height:1.4}
+.ai-panel{position:fixed;bottom:110px;left:28px;width:360px;max-height:520px;background:#0d1825;border:1px solid var(--accent);border-radius:12px;display:none;flex-direction:column;z-index:998;box-shadow:0 8px 40px #00000088}
+.ai-panel.on{display:flex}
+.ai-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ai-head .dot{width:8px;height:8px;border-radius:50%;background:var(--active);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ai-head-t{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);flex:1}
+.ai-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px}
+.ai-close:hover{color:var(--text)}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:200px}
+.ai-msg{max-width:90%;padding:10px 13px;border-radius:8px;font-size:12px;line-height:1.6}
+.ai-msg.user{background:#00BFFF18;border:1px solid #00BFFF30;color:var(--text);align-self:flex-end;font-family:var(--fm)}
+.ai-msg.bot{background:#111620;border:1px solid var(--border);color:var(--text);align-self:flex-start}
+.ai-msg.thinking{color:var(--muted);font-style:italic}
+.ai-input-row{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px}
+.ai-input{flex:1;background:#111620;border:1px solid var(--border);color:var(--text);font-family:var(--fm);font-size:12px;padding:9px 12px;border-radius:6px;outline:none;resize:none}
+.ai-input:focus{border-color:var(--accent)}
+.ai-send{background:var(--accent);border:none;color:#000;font-size:15px;width:36px;height:36px;border-radius:6px;cursor:pointer;font-weight:700;transition:opacity .15s}
+.ai-send:hover{opacity:.8}
+.ai-send:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:768px){.ai-panel{width:calc(100vw - 40px);left:20px}}
 @keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 ::-webkit-scrollbar{width:5px;height:5px}
@@ -145,6 +173,16 @@ tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border)
 .row-match td{background:#00BFFF08!important}
 .save-modal-bg{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:1001}
 .save-modal-bg.on{display:flex}
+.pin-bg{position:fixed;inset:0;background:#000000bb;display:none;align-items:center;justify-content:center;z-index:1002}
+.pin-bg.on{display:flex}
+.pin-box{background:#0d1825;border:1px solid var(--accent);border-radius:11px;padding:28px 24px;width:260px;text-align:center}
+.pin-box h3{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.pin-in{width:100%;background:#111620;border:1px solid var(--border);color:var(--text);font-family:var(--fm);font-size:26px;letter-spacing:10px;text-align:center;padding:10px;border-radius:6px;outline:none;margin-bottom:10px}
+.pin-in:focus{border-color:var(--accent)}
+.pin-err{font-family:var(--fm);font-size:11px;color:var(--expired);display:none;margin-bottom:10px}
+.pin-row{display:flex;gap:10px;justify-content:center}
+.pin-ok{background:var(--accent-d);border:1px solid var(--accent);color:var(--accent);font-family:var(--fm);font-size:12px;padding:8px 20px;border-radius:6px;cursor:pointer}
+.pin-cancel{background:none;border:1px solid var(--border);color:var(--muted);font-family:var(--fm);font-size:12px;padding:8px 20px;border-radius:6px;cursor:pointer}
 .save-modal{background:#0d1825;border:1px solid var(--active);border-radius:11px;padding:30px;max-width:380px;width:90%;text-align:center}
 .save-modal h3{font-family:var(--fh);font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--active);margin-bottom:18px}
 .sm-label{display:block;font-family:var(--fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;text-align:left}
@@ -180,7 +218,7 @@ tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border)
   <div class="hdr-logo">NN</div>
   <div>
     <div class="hdr-t">Niron Noble · Insurance Tracker</div>
-    <div class="hdr-s">ALL ENTITIES &nbsp;·&nbsp; RESTRUCTURED APR 2026 &nbsp;·&nbsp; v2.1</div>
+    <div class="hdr-s">ALL ENTITIES &nbsp;·&nbsp; RESTRUCTURED APR 2026 &nbsp;·&nbsp; v2.4</div>
   </div>
   <div class="hdr-right">
     <div class="hdr-dt" id="dt"></div>
@@ -647,6 +685,42 @@ tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border)
 </div>
 </div>
 
+<!-- AI CHAT WIDGET -->
+<div class="ai-btn-wrap">
+  <button class="ai-btn" onclick="toggleAI()">
+    🤖
+    <div class="ai-tip">Ask me anything about this dashboard</div>
+  </button>
+  <div class="ai-label">AI Assistant<br>שאל אותי כל שאלה</div>
+</div>
+<div class="ai-panel" id="ai-panel">
+  <div class="ai-head">
+    <div class="dot"></div>
+    <div class="ai-head-t">Insurance AI Assistant</div>
+    <button class="ai-close" onclick="toggleAI()">✕</button>
+  </div>
+  <div class="ai-msgs" id="ai-msgs">
+    <div class="ai-msg bot">👋 שלום! אני הסוכן החכם של Niron Noble Insurance.<br><br>אני יכול לענות על כל שאלה לגבי הפוליסות, הנכסים, הפרמיות, תאריכי חידוש, סוכנים ועוד.<br><br>Hello! Ask me anything about the policies, properties, premiums, renewal dates, agents and more.</div>
+  </div>
+  <div class="ai-input-row">
+    <textarea class="ai-input" id="ai-input" rows="1" placeholder="שאל שאלה / Ask a question..." onkeydown="aiKey(event)"></textarea>
+    <button class="ai-send" id="ai-send" onclick="aiSend()">➤</button>
+  </div>
+</div>
+
+<!-- PIN MODAL -->
+<div class="pin-bg" id="pin-bg">
+  <div class="pin-box">
+    <h3>🔑 Owner Access</h3>
+    <input class="pin-in" id="pin-in" type="password" maxlength="6" placeholder="····" onkeydown="if(event.key==='Enter') pinSubmit()">
+    <div class="pin-err" id="pin-err">❌ Wrong PIN</div>
+    <div class="pin-row">
+      <button class="pin-ok" onclick="pinSubmit()">Enter</button>
+      <button class="pin-cancel" onclick="pinClose()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- SAVE MODAL -->
 <div class="save-modal-bg" id="save-modal">
   <div class="save-modal">
@@ -683,13 +757,146 @@ tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border)
 <div class="toast" id="toast"></div>
 
 <script>
+// ── AI CHAT ──
+const AI_SYSTEM = `You are an expert insurance assistant for Niron Noble LLC, a real estate investment company. You have complete knowledge of all their insurance policies. Answer questions in the same language the user writes in (Hebrew or English). Be concise, accurate and helpful.
+
+DIVANDO LLC — 13 CO SFRs (State Farm)
+Carrier: State Farm Fire & Casualty | Agent: Kevin Schult (303)989-3847 | kevin.schult.l4wu@statefarm.com
+Period: Dec 15 2025 to Dec 15 2026 | Annual: $34,630 | Monthly: $2,885.83 | Payment: Auto-draft Divando acct 2nd of month
+Deductible: 1% building value | Medical: $1,000/person | Loss of Rents: Actual Loss Sustained
+1724 Boston St Aurora CO 96-E4-G680-1 $331,200 deduct $3,312 annual $2,364 liability $500K/$1M
+2332 Oakland St Aurora CO 96-E4-G665-0 $420,100 deduct $4,201 annual $2,612 liability $2M/$4M
+2397 Jamaica St Aurora CO 96-E4-G683-7 $378,800 deduct $3,788 annual $2,425 DORADO OWNED $138/mo credit stop Dec 2026
+3225 Tucson St Aurora CO 96-E4-G667-4 $336,400 deduct $3,364 annual $2,255
+3630 Holly St Denver CO 96-E4-G670-0 $444,800 deduct $4,448 annual $2,693
+4641 Enid Way Denver CO 96-E4-G684-9 $361,100 deduct $3,611 annual $2,528 DORADO OWNED $138/mo credit stop Dec 2026
+4776 Blackhawk Way Denver CO 96-E4-G672-4 $525,500 deduct $5,255 annual $3,320
+5101 Crown Blvd Denver CO 96-E4-G673-6 $397,100 deduct $3,971 annual $2,702
+5538 Dearborn St Denver CO 96-E4-G675-1 $417,300 deduct $4,173 annual $2,610
+11795 E Virginia Dr Aurora CO 96-E4-G678-7 $378,800 deduct $3,788 annual $2,443
+14790 E 43rd Ave Denver CO 96-E4-G677-5 $384,500 deduct $3,845 annual $2,642
+15559 E Bates Ave Aurora CO 96-E4-G679-9 $393,400 deduct $3,934 annual $2,507
+15655 E 13th Ave Aurora CO 96-E4-G681-3 $618,900 deduct $6,189 annual $3,529
+Memphis TN EXPIRED: 6580 Stockport Dr #GAIP1052582 exp 6/18/24 | 3899 Joest Dr #OSCESIN02 exp 4/12/24 | Roxana Rios 901-321-1124
+
+DORADO LLC — Fourplex 1460 W 41st Ave Denver CO 80211
+Carrier: Berkshire Hathaway Homestate | Policy: 02PRM080318-06 | Period: Nov 6 2025 to Nov 6 2026
+Annual: $5,440 | Monthly: $453.33 | Payment: Dorado LLC debit card auto-drafted monthly
+Building: $775,000 | Biz Income: $60,600 | Prop Premium: $5,070 | Liability Premium: $370
+Deductible Standard: $2,500 | Wind/Hail: $15,500 | Liability: $1M occ/$2M aggregate | Fire Legal: $100K | Medical: $5,000
+Agent: Hannah Burford IMA Select LLC | Direct (303)615-7840 | Office (303)534-4567 | hannah.burford@imacorp.com
+Billing: 240311 | Mortgagees: ANB Bank ISAOA, Collegiate Peaks Bank div Glacier Bank
+Dorado also owns 2397 Jamaica St + 4641 Enid Way insured under Divando/State Farm. $138/mo credit to Divando. Stop Dec 2026.
+
+DONALD LLC — 4 Duplexes 5060-5082 E Donald Ave Denver CO 80222
+Named Insured: 5070 E Donald Ave Denver LLC | Carrier: Westfield Superior | Policy: 499841Y
+Period: Sep 20 2025 to Sep 20 2026 | Annual: $14,530 | Monthly: $1,210.84 | Payment: Donald LLC acct 2nd of month
+Coverage per duplex: $1,125,500 | Biz Income: $15,000/bldg | Ordinance/Law: $225,000
+Prop Premium: $13,500 | Liability Premium: $1,028 | CO Hazard: $2
+Deductible Standard: $10,000 | Wind/Hail: $0 | Crime: $500 | Valuable Papers: $500 | Biz Personal Prop: $1,000
+Liability: $2M occ/$4M aggregate/Products $4M/Premises Rented $1M | Medical: Excluded | Excess: Rejected
+Crime Limits: Employee Theft $25K Forgery $25K Inside $25K Outside $25K Money Orders $2,500
+Accounts Receivable: $100,000 | Mortgageholder: CBRE Loan Services Inc | Additional Insured: Laureate LTD
+Agent: Wren Arbuthnot Arrow Insurance Management | 970-668-3500 | warbuthnot@arrowinsurance.net | Billing: 6000129933
+Duplexes: 5060+5062, 5064+5066, 5070+5072, 5080+5082 E Donald Ave Denver CO 80222
+
+YALE LLC — 2991-2999 W Yale Ave Denver CO (5 townhome units)
+Named Insured: Yale Townhomes LLC | Carrier: Acuity A Mutual Insurance | Policy: ZM1786-01
+Period: Feb 22 2026 to Feb 22 2027 | Annual: $11,248 | Monthly: $1,024.54 (11-pay $1,024.56 down)
+Payment: Yale LLC dedicated acct debit card 24th of month
+Building: $1,900,799 | Personal Property: $65,862
+Deductible Standard: $5,000 | Wind/Hail: 2% per building
+Liability Bis-Pak: $1M occ/$3M aggregate/Products $3M/Premises Rented $300K/Medical $10K per person
+Liability Excess: $2M occ/$2M aggregate/Products $2M/Hired+Nonowned Auto included
+Additional Named Insureds: Nir Shay, Ron Moscovich
+Agent: Nathan Michael Fonseca CRS Insurance Brokerage Agency #7118-BL | 720-727-6049
+Terrorism: $353 | Endorsements: Acuity Property Platinum, Acuity Liability Gold, Equipment Breakdown
+Exclusions: Roof cosmetic damage, Cyber, Cannabis, PFAS, Asbestos, Fungi
+
+SUMMARY
+Total Monthly: $5,574.54 (Divando $2,885.83 + Donald $1,210.84 + Yale $1,024.54 + Dorado $453.33)
+Next renewals: Sep 20 2026 Donald | Nov 6 2026 Dorado | Dec 15 2026 Divando | Feb 22 2027 Yale
+Total 35+ properties/units. Memphis TN VERIFY — Fortegra expired mid-2024.`;
+
+let aiHistory = [];
+
+function toggleAI(){
+  const p=document.getElementById('ai-panel');
+  p.classList.toggle('on');
+  if(p.classList.contains('on')) document.getElementById('ai-input').focus();
+}
+
+function aiKey(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSend();}
+}
+
+async function aiSend(){
+  const input=document.getElementById('ai-input');
+  const q=input.value.trim();
+  if(!q) return;
+  input.value='';
+  addMsg(q,'user');
+  const btn=document.getElementById('ai-send');
+  btn.disabled=true;
+  const thinking=addMsg('...','thinking');
+  aiHistory.push({role:'user',content:q});
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYSTEM,messages:aiHistory})
+    });
+    const data=await res.json();
+    const answer=data.content?.[0]?.text||'Sorry, no response.';
+    thinking.remove();
+    addMsg(answer,'bot');
+    aiHistory.push({role:'assistant',content:answer});
+    if(aiHistory.length>20) aiHistory=aiHistory.slice(-20);
+  }catch(err){
+    thinking.remove();
+    addMsg('שגיאה / Connection error. Try again.','bot');
+  }
+  btn.disabled=false;
+  document.getElementById('ai-input').focus();
+}
+
+function addMsg(text,type){
+  const msgs=document.getElementById('ai-msgs');
+  const div=document.createElement('div');
+  div.className='ai-msg '+type;
+  div.innerHTML=text.replace(/\n/g,'<br>');
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return div;
+}
+
+// ── OWNER MODE ──
 function ownerLogin(){
-  const pin=prompt('');
-  if(pin==='2703') document.getElementById('owner-panel').classList.add('on');
+  document.getElementById('pin-in').value='';
+  document.getElementById('pin-err').style.display='none';
+  document.getElementById('pin-bg').classList.add('on');
+  setTimeout(()=>document.getElementById('pin-in').focus(),100);
+}
+function pinSubmit(){
+  const val=document.getElementById('pin-in').value;
+  if(val==='2703'){
+    document.getElementById('pin-bg').classList.remove('on');
+    document.getElementById('owner-panel').classList.add('on');
+  } else {
+    document.getElementById('pin-err').style.display='block';
+    document.getElementById('pin-in').value='';
+    document.getElementById('pin-in').focus();
+  }
+}
+function pinClose(){
+  document.getElementById('pin-bg').classList.remove('on');
 }
 function closeOwner(){
   document.getElementById('owner-panel').classList.remove('on');
 }
+document.getElementById('pin-bg').addEventListener('click',function(e){
+  if(e.target===this) pinClose();
+});
 
 function show(id,btn){
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
