@@ -218,7 +218,7 @@ tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border)
   <div class="hdr-logo">NN</div>
   <div>
     <div class="hdr-t">Niron Noble · Insurance Tracker</div>
-    <div class="hdr-s">ALL ENTITIES &nbsp;·&nbsp; RESTRUCTURED APR 2026 &nbsp;·&nbsp; v2.4</div>
+    <div class="hdr-s">ALL ENTITIES &nbsp;·&nbsp; RESTRUCTURED APR 2026 &nbsp;·&nbsp; v2.5</div>
   </div>
   <div class="hdr-right">
     <div class="hdr-dt" id="dt"></div>
@@ -279,6 +279,41 @@ tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border)
     <div class="ag"><div class="an">Dorado — Berkshire Hathaway</div><div class="ad">Hannah Burford — IMA Select LLC<br>📞 Direct: (303) 615-7840<br>📞 Office: (303) 534-4567<br>✉️ hannah.burford@imacorp.com</div></div>
     <div class="ag"><div class="an">Yale — Acuity</div><div class="ad">Nathan Fonseca<br>CRS Insurance Brokerage · #7118-BL<br>📞 720-727-6049</div></div>
   </div>
+
+  <div class="st" style="margin-top:20px">🌐 How to Publish Updates to Live Site</div>
+  <div class="wf-grid">
+    <div class="wf-step">
+      <div class="n">01</div>
+      <div class="t">Download from Claude</div>
+      <div class="d">After Claude updates the dashboard, download the new file.<br>Rename it to exactly <b>index.html</b></div>
+    </div>
+    <div class="wf-step">
+      <div class="n">02</div>
+      <div class="t">Replace File on PC</div>
+      <div class="d">Go to your dedicated folder:<br><b>Documents → Insurance</b><br>Drop the new <b>index.html</b> there — replace the old one.</div>
+    </div>
+    <div class="wf-step">
+      <div class="n">03</div>
+      <div class="t">Open GitHub Desktop</div>
+      <div class="d">Open <b>GitHub Desktop</b> on your PC.<br>You will see <b>1 changed file</b> — index.html listed with green lines.</div>
+    </div>
+    <div class="wf-step">
+      <div class="n">04</div>
+      <div class="t">Commit</div>
+      <div class="d">In the bottom left box type a message like:<br><b>"Update v2.5"</b> or <b>"Renewal Dec 2026"</b><br>Then click <b>Commit to main</b></div>
+    </div>
+    <div class="wf-step">
+      <div class="n">05</div>
+      <div class="t">Push to GitHub</div>
+      <div class="d">After commit, a new button appears at the top:<br><b>Push origin</b> — click it.<br>Done ✅ Netlify updates in 30 seconds.</div>
+    </div>
+    <div class="wf-step">
+      <div class="n">06</div>
+      <div class="t">Verify Live Site</div>
+      <div class="d">Go to:<br><b>niron-noble-insurance.netlify.app</b><br>Refresh — you should see the new version number in the header.</div>
+    </div>
+  </div>
+  <div style="font-family:var(--fm);font-size:11px;color:var(--muted);margin-top:8px">⏱ Total time: ~2 minutes &nbsp;·&nbsp; GitHub Desktop folder: <b>Documents → Insurance → index.html</b></div>
 </div>
 <nav class="nav">
   <button class="tb on" onclick="show('summary',this)">📊 Summary</button>
