@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niron Noble | Insurance Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090d12;--bg-card:#111620;--bg-hover:#182030;--border:#1e2d42;--accent:#00BFFF;--accent-d:#00BFFF18;--glow:0 0 22px #00BFFF33;--text:#ccd9ea;--muted:#4e6d8c;--active:#00c97a;--warn:#f0a500;--expired:#ff4455;--edit:#f0a500;--edit-bg:#f0a50010;--edit-border:#f0a50055;--fh:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;--fm:'IBM Plex Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;overflow-x:hidden}
+.hdr{background:linear-gradient(180deg,#0c1a2e 0%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:18px 40px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hdr-logo{width:42px;height:42px;background:var(--accent-d);border:1px solid var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:var(--fm);font-size:16px;box-shadow:var(--glow);flex-shrink:0}
+.hdr-t{font-family:var(--fh);font-size:21px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.hdr-s{font-family:var(--fm);font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-top:2px}
+.hdr-right{margin-left:auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.hdr-dt{font-family:var(--fm);font-size:11px;color:var(--accent)}
+.drive-btn{font-family:var(--fm);font-size:10px;background:var(--accent-d);border:1px solid var(--accent);color:var(--accent);padding:6px 14px;border-radius:5px;cursor:pointer;text-decoration:none;letter-spacing:.5px;display:flex;align-items:center;gap:5px;transition:all .15s}
+.drive-btn:hover{background:#00BFFF30}
+.edit-banner{background:#f0a50010;border-bottom:1px solid #f0a50035;padding:9px 40px;display:flex;align-items:center;gap:10px;font-family:var(--fm);font-size:11px;color:var(--warn)}
+.edit-banner span{color:var(--muted)}
+.nav{display:flex;border-bottom:1px solid var(--border);background:#0b1422;padding:0 40px;overflow-x:auto}
+.tb{font-family:var(--fh);font-size:17px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:15px 24px;border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;transition:all .18s;white-space:nowrap}
+.tb:hover{color:var(--text)}
+.tb.on{color:var(--accent);border-bottom-color:var(--accent)}
+.con{padding:32px 40px;max-width:1640px;margin:0 auto}
+.pane{display:none}
+.pane.on{display:block}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:30px}
+.mc{background:var(--bg-card);border:1px solid var(--border);border-radius:9px;padding:24px;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.5}
+.ml{font-family:var(--fm);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.mv{font-family:var(--fm);font-size:32px;font-weight:500;color:var(--accent);line-height:1}
+.ms{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+.st{font-family:var(--fm);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.st::after{content:'';flex:1;height:1px;background:var(--border)}
+.renewal-card{background:#0d1825;border:1px solid var(--edit-border);border-radius:9px;padding:22px;margin-bottom:28px;position:relative}
+.renewal-card::before{content:'✏️ EDITABLE — Click any amber field to update at renewal';position:absolute;top:-1px;right:16px;background:#0d1825;padding:0 8px;font-family:var(--fm);font-size:9px;letter-spacing:1px;color:var(--warn);border:1px solid var(--edit-border);border-radius:3px;transform:translateY(-50%)}
+.rc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}
+.rf label{display:block;font-family:var(--fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.rf .ev{font-family:var(--fm);font-size:13px;color:var(--text);min-height:22px;padding:3px 6px;border-radius:4px;border:1px solid transparent;line-height:1.5;word-break:break-word}
+.rf .ev.editable{background:var(--edit-bg);border-color:var(--edit-border);color:var(--warn);cursor:text}
+.rf .ev.editable:focus{outline:none;border-color:var(--warn);background:#f0a50018;box-shadow:0 0 12px #f0a50022}
+.rf .ev.ok{color:var(--active)}
+.rf .ev.hi{color:var(--accent)}
+.renewal-actions{margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ra-btn{font-family:var(--fm);font-size:10px;padding:6px 14px;border-radius:5px;cursor:pointer;letter-spacing:.5px;border:none;transition:all .15s}
+.ra-save{background:#f0a50025;border:1px solid var(--warn);color:var(--warn)}
+.ra-save:hover{background:#f0a50040}
+.ra-note{font-family:var(--fm);font-size:10px;color:var(--muted)}
+.ra-renew{background:#00c97a18;border:1px solid var(--active);color:var(--active)}
+.ra-renew:hover{background:#00c97a30}
+.modal-bg{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:1000}
+.modal-bg.on{display:flex}
+.modal{background:#0d1825;border:1px solid var(--warn);border-radius:11px;padding:32px;max-width:420px;width:90%;text-align:center}
+.modal h3{font-family:var(--fh);font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--warn);margin-bottom:12px}
+.modal p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:22px}
+.modal p strong{color:var(--text)}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.m-yes{background:#00c97a22;border:1px solid var(--active);color:var(--active);font-family:var(--fm);font-size:12px;padding:9px 24px;border-radius:6px;cursor:pointer;transition:all .15s}
+.m-yes:hover{background:#00c97a40}
+.m-no{background:#ff445518;border:1px solid var(--expired);color:var(--expired);font-family:var(--fm);font-size:12px;padding:9px 24px;border-radius:6px;cursor:pointer;transition:all .15s}
+.m-no:hover{background:#ff445530}
+.pc{background:var(--bg-card);border:1px solid var(--border);border-radius:9px;padding:20px;margin-bottom:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:16px}
+.pf label{display:block;font-family:var(--fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.pf .v{font-family:var(--fm);font-size:12px;color:var(--text);line-height:1.6}
+.pf .v.ac{color:var(--accent)}
+.pf .v.ok{color:var(--active)}
+.pf .v.ex{color:var(--expired);text-decoration:line-through}
+.pf .v.wn{color:var(--warn)}
+.lg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.lc{background:var(--bg-card);border:1px solid var(--border);border-radius:9px;padding:18px}
+.ln{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.la{font-family:var(--fm);font-size:20px;color:var(--text);margin:6px 0 5px}
+.ld{font-size:12px;color:var(--muted);line-height:1.6}
+.rl{background:var(--bg-card);border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:28px}
+.rh{padding:12px 20px;border-bottom:1px solid var(--border);font-family:var(--fm);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.rr{display:flex;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border);gap:12px}
+.rr:last-child{border-bottom:none}
+.rr:hover{background:var(--bg-hover)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.d-a{background:var(--active)}.d-w{background:var(--warn)}.d-e{background:var(--expired)}
+.re{font-family:var(--fh);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text);min-width:130px}
+.rc-r{font-size:12px;color:var(--muted);flex:1}
+.rd{font-family:var(--fm);font-size:12px;color:var(--text);min-width:140px}
+.badge{font-family:var(--fm);font-size:10px;padding:3px 10px;border-radius:20px;min-width:72px;text-align:center;letter-spacing:.5px}
+.b-a{background:#00c97a18;color:var(--active);border:1px solid #00c97a35}
+.b-w{background:#f0a50018;color:var(--warn);border:1px solid #f0a50035}
+.b-e{background:#ff445518;color:var(--expired);border:1px solid #ff445535}
+.tw{background:var(--bg-card);border:1px solid var(--border);border-radius:9px;overflow:auto;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{font-family:var(--fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);background:#0b1422;white-space:nowrap}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;line-height:1.5}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--bg-hover)}
+tfoot td{padding:12px 14px;background:#0b1422;border-top:1px solid var(--border);font-family:var(--fm);font-size:12px;font-weight:500;color:var(--accent)}
+.mn{font-family:var(--fm)}
+.ta{color:var(--active)}
+.te{color:var(--expired);text-decoration:line-through}
+.tn{font-size:11px;color:var(--muted);max-width:200px;line-height:1.5}
+.tw-wn td{background:#f0a50009}
+.hist{opacity:.5}
+.hist:hover{opacity:.75}
+.toast{position:fixed;bottom:24px;right:24px;background:#00c97a22;border:1px solid var(--active);color:var(--active);font-family:var(--fm);font-size:12px;padding:10px 18px;border-radius:6px;display:none;z-index:999;animation:fadein .3s}
+.ai-btn-wrap{position:fixed;bottom:28px;left:28px;display:flex;flex-direction:column;align-items:center;gap:6px;z-index:998}
+.ai-btn{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#00BFFF,#0080cc);border:none;cursor:pointer;font-size:22px;box-shadow:0 4px 20px #00BFFF44;transition:transform .2s;position:relative}
+.ai-btn:hover{transform:scale(1.1)}
+.ai-btn:hover .ai-tip{opacity:1;transform:translateY(0)}
+.ai-tip{position:absolute;bottom:58px;left:50%;transform:translateX(-50%) translateY(4px);background:#0d1825;border:1px solid var(--accent);color:var(--accent);font-family:var(--fm);font-size:10px;white-space:nowrap;padding:6px 12px;border-radius:6px;opacity:0;transition:all .2s;pointer-events:none;letter-spacing:.5px}
+.ai-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--accent)}
+.ai-label{font-family:var(--fm);font-size:9px;letter-spacing:.5px;color:var(--muted);text-align:center;white-space:nowrap;line-height:1.4}
+.ai-panel{position:fixed;bottom:110px;left:28px;width:360px;max-height:520px;background:#0d1825;border:1px solid var(--accent);border-radius:12px;display:none;flex-direction:column;z-index:998;box-shadow:0 8px 40px #00000088}
+.ai-panel.on{display:flex}
+.ai-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ai-head .dot{width:8px;height:8px;border-radius:50%;background:var(--active);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ai-head-t{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);flex:1}
+.ai-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px}
+.ai-close:hover{color:var(--text)}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:200px}
+.ai-msg{max-width:90%;padding:10px 13px;border-radius:8px;font-size:12px;line-height:1.6}
+.ai-msg.user{background:#00BFFF18;border:1px solid #00BFFF30;color:var(--text);align-self:flex-end;font-family:var(--fm)}
+.ai-msg.bot{background:#111620;border:1px solid var(--border);color:var(--text);align-self:flex-start}
+.ai-msg.thinking{color:var(--muted);font-style:italic}
+.ai-input-row{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px}
+.ai-input{flex:1;background:#111620;border:1px solid var(--border);color:var(--text);font-family:var(--fm);font-size:12px;padding:9px 12px;border-radius:6px;outline:none;resize:none}
+.ai-input:focus{border-color:var(--accent)}
+.ai-send{background:var(--accent);border:none;color:#000;font-size:15px;width:36px;height:36px;border-radius:6px;cursor:pointer;font-weight:700;transition:opacity .15s}
+.ai-send:hover{opacity:.8}
+.ai-send:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:768px){.ai-panel{width:calc(100vw - 40px);left:20px}}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+.search-wrap{background:#0b1422;border-bottom:1px solid var(--border);padding:10px 40px}
+.search-input{width:100%;max-width:620px;background:#111620;border:1px solid var(--border);color:var(--text);font-family:var(--fm);font-size:13px;padding:10px 16px;border-radius:7px;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--muted)}
+.row-hide{display:none!important}
+.row-match td{background:#00BFFF08!important}
+.save-modal-bg{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:1001}
+.save-modal-bg.on{display:flex}
+.pin-bg{position:fixed;inset:0;background:#000000bb;display:none;align-items:center;justify-content:center;z-index:1002}
+.pin-bg.on{display:flex}
+.pin-box{background:#0d1825;border:1px solid var(--accent);border-radius:11px;padding:28px 24px;width:260px;text-align:center}
+.pin-box h3{font-family:var(--fh);font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.pin-in{width:100%;background:#111620;border:1px solid var(--border);color:var(--text);font-family:var(--fm);font-size:26px;letter-spacing:10px;text-align:center;padding:10px;border-radius:6px;outline:none;margin-bottom:10px}
+.pin-in:focus{border-color:var(--accent)}
+.pin-err{font-family:var(--fm);font-size:11px;color:var(--expired);display:none;margin-bottom:10px}
+.pin-row{display:flex;gap:10px;justify-content:center}
+.pin-ok{background:var(--accent-d);border:1px solid var(--accent);color:var(--accent);font-family:var(--fm);font-size:12px;padding:8px 20px;border-radius:6px;cursor:pointer}
+.pin-cancel{background:none;border:1px solid var(--border);color:var(--muted);font-family:var(--fm);font-size:12px;padding:8px 20px;border-radius:6px;cursor:pointer}
+.save-modal{background:#0d1825;border:1px solid var(--active);border-radius:11px;padding:30px;max-width:380px;width:90%;text-align:center}
+.save-modal h3{font-family:var(--fh);font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--active);margin-bottom:18px}
+.sm-label{display:block;font-family:var(--fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;text-align:left}
+.sm-select,.sm-date{width:100%;background:#111620;border:1px solid var(--border);color:var(--text);font-family:var(--fm);font-size:13px;padding:9px 12px;border-radius:6px;margin-bottom:16px;outline:none;cursor:pointer}
+.sm-select:focus,.sm-date:focus{border-color:var(--active)}
+.sm-warn{font-family:var(--fm);font-size:11px;color:var(--warn);margin-bottom:14px;display:none}
+.owner-btn{background:none;border:none;cursor:pointer;font-size:15px;opacity:.2;transition:opacity .2s;padding:4px 8px;color:var(--muted)}
+.owner-btn:hover{opacity:.5}
+.owner-panel{display:none;background:#0a1520;border:1px solid #00BFFF35;border-radius:9px;padding:26px;margin:0 40px 28px;position:relative}
+.owner-panel.on{display:block}
+.owner-panel h3{font-family:var(--fh);font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+.owner-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer}
+.owner-close:hover{color:var(--text)}
+.wf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px}
+.wf-step{background:#0d1825;border:1px solid var(--border);border-radius:7px;padding:16px}
+.wf-step .n{font-family:var(--fm);font-size:22px;color:var(--accent);margin-bottom:4px}
+.wf-step .t{font-family:var(--fh);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:8px}
+.wf-step .d{font-size:12px;color:var(--muted);line-height:1.8}
+.wf-step .d b{color:var(--text)}
+.wf-links{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.wf-link{font-family:var(--fm);font-size:11px;padding:7px 14px;border-radius:5px;text-decoration:none;background:var(--accent-d);border:1px solid var(--accent);color:var(--accent)}
+.wf-link:hover{background:#00BFFF30}
+.agents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.ag{background:#0d1825;border:1px solid var(--border);border-radius:7px;padding:14px}
+.ag .an{font-family:var(--fh);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.ag .ad{font-size:11px;color:var(--muted);line-height:1.7}
+@media(max-width:768px){.mg{grid-template-columns:1fr}.con{padding:18px}.hdr{padding:12px 18px}.nav{padding:0 18px}.edit-banner{padding:8px 18px}.search-wrap{padding:10px 18px}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-logo">NN</div>
+  <div>
+    <div class="hdr-t">Niron Noble · Insurance Tracker</div>
+    <div class="hdr-s">ALL ENTITIES &nbsp;·&nbsp; RESTRUCTURED APR 2026 &nbsp;·&nbsp; v3.1</div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-dt" id="dt"></div>
+    <button class="owner-btn" onclick="ownerLogin()" title="">🔑</button>
+    <a class="drive-btn" href="https://drive.google.com/drive/folders/1X_YzNQetvuBbgi0yp6Dwe_8i8HaKfknf" target="_blank">📁 Policy Documents (Drive)</a>
+  </div>
+</div>
+<div class="edit-banner">✏️ LIVE EDITABLE DASHBOARD &nbsp;·&nbsp;<span>Each tab has an amber renewal card — click any amber field to edit.</span></div>
+<div class="search-wrap"><input type="text" id="search" class="search-input" placeholder="🔍  Search address, carrier, policy #, LLC name..." oninput="doSearch(this.value)"></div>
+<div class="owner-panel" id="owner-panel">
+  <button class="owner-close" onclick="closeOwner()">✕</button>
+  <h3>🔑 Owner Mode — Renewal Workflow</h3>
+  <div class="wf-links">
+    <a class="wf-link" href="https://niron-noble-insurance.moscoron.workers.dev" target="_blank">🌐 Live Dashboard (Cloudflare)</a>
+    <a class="wf-link" href="https://github.com/moscoron-collab/niron-noble-insurance" target="_blank">📁 GitHub Repo</a>
+  </div>
+  <div class="wf-grid">
+    <div class="wf-step"><div class="n">01</div><div class="t">Download from Claude</div><div class="d">After Claude updates the dashboard, click the file in chat → <b>Download</b><br>Save it to your PC.</div></div>
+    <div class="wf-step"><div class="n">02</div><div class="t">Rename to index.html</div><div class="d">Right-click → <b>Rename</b><br>Name it exactly: <b>index.html</b><br>View → File name extensions ✓</div></div>
+    <div class="wf-step"><div class="n">03</div><div class="t">Delete Old on GitHub</div><div class="d">github.com/moscoron-collab/niron-noble-insurance<br>Click old <b>index.html</b> → 🗑️ → <b>Commit changes</b></div></div>
+    <div class="wf-step"><div class="n">04</div><div class="t">Upload New File</div><div class="d"><b>Add file → Upload files</b><br>Drag new <b>index.html</b> → <b>Commit changes</b></div></div>
+    <div class="wf-step"><div class="n">05</div><div class="t">Verify Live Site</div><div class="d">Wait 30 seconds<br>Open <b>niron-noble-insurance.moscoron.workers.dev</b><br>Ctrl+Shift+R to refresh ✅</div></div>
+  </div>
+  <div class="st" style="margin-top:4px">Agent Contacts</div>
+  <div class="agents-grid">
+    <div class="ag"><div class="an">Divando — State Farm</div><div class="ad">Kevin Schult Ins Agency Inc<br>📞 (303) 989-3847 · (303) 989-3849<br>✉️ kevin.schult.l4wu@statefarm.com</div></div>
+    <div class="ag"><div class="an">Donald — Westfield</div><div class="ad">Wren Arbuthnot · Arrow Insurance<br>📞 970-668-3500<br>✉️ warbuthnot@arrowinsurance.net</div></div>
+    <div class="ag"><div class="an">Dorado — Berkshire Hathaway</div><div class="ad">Hannah Burford — IMA Select LLC<br>📞 Direct: (303) 615-7840<br>✉️ hannah.burford@imacorp.com</div></div>
+    <div class="ag"><div class="an">Yale — Acuity</div><div class="ad">Nathan Fonseca · CRS Insurance<br>📞 720-727-6049</div></div>
+  </div>
+</div>
+<nav class="nav">
+  <button class="tb on" onclick="show('summary',this)">📊 Summary</button>
+  <button class="tb" onclick="show('divando',this)">🏠 Divando</button>
+  <button class="tb" onclick="show('dorado',this)">🏢 Dorado</button>
+  <button class="tb" onclick="show('yale',this)">🏛️ Yale</button>
+  <button class="tb" onclick="show('donald',this)">🏘️ Donald</button>
+  <button class="tb" onclick="show('archive',this)">📁 Archive</button>
+</nav>
+<div class="con">
+<div id="p-summary" class="pane on">
+  <div class="mg">
+    <div class="mc"><div class="ml">💰 Total Monthly · All Active</div><div class="mv">$5,574<span style="font-size:17px">.54</span></div><div class="ms">Divando $2,885.83 + Donald $1,210.84 + Yale $1,024.54 + Dorado $453.33<br><span style="color:var(--warn)">Memphis TN — verify status</span></div></div>
+    <div class="mc"><div class="ml">📅 Next Renewals Coming Up</div><div class="mv" style="font-size:17px;padding-top:4px">Sep 20, 2026</div><div class="ms">Donald LLC (Westfield Superior)<br>Nov 6, 2026 — Dorado (Berkshire Hathaway)<br>Dec 15, 2026 — Divando SFRs (State Farm)<br>Feb 22, 2027 — Yale (Acuity)</div></div>
+    <div class="mc"><div class="ml">🏘️ Properties / Units Covered</div><div class="mv">35+</div><div class="ms">CO SFRs: 13 · Donald duplexes: 8 units · Yale: 5 units<br>Fourplex: 4 units · FL: 5 · TN: 2 ⚠️ verify</div></div>
+  </div>
+  <div class="st">Monthly Cost by LLC / Portfolio</div>
+  <div class="lg">
+    <div class="lc"><div class="ln">Divando — CO SFRs</div><div class="la">$2,885<span style="font-size:14px">.83/mo</span></div><div class="ld">State Farm · Kevin Schult 303-989-3847<br>13 SFRs · SFPP auto-draft<br>Dec 15, 2025 → Dec 15, 2026</div></div>
+    <div class="lc"><div class="ln">Donald — 4 Duplexes</div><div class="la">$1,210<span style="font-size:14px">.84/mo</span></div><div class="ld">Westfield Superior · 499841Y<br>Donald acct · 2nd of month<br>Sep 20, 2025 → Sep 20, 2026</div></div>
+    <div class="lc"><div class="ln">Yale — Townhomes</div><div class="la">$1,024<span style="font-size:14px">.54/mo</span></div><div class="ld">Acuity · Policy ZM1786-01<br>CRS Insurance / Nathan Fonseca<br>Feb 22, 2026 → Feb 22, 2027</div></div>
+    <div class="lc"><div class="ln">Dorado — Fourplex</div><div class="la">$453<span style="font-size:14px">.33/mo</span></div><div class="ld">Berkshire Hathaway · 1460 W 41st<br>IMA Select 303-534-4567<br>Nov 6, 2025 → Nov 6, 2026</div></div>
+    <div class="lc" style="border-color:#f0a50030"><div class="ln" style="color:var(--warn)">Memphis TN</div><div class="la" style="font-size:15px;color:var(--warn);padding-top:6px">⚠️ Verify Status</div><div class="ld">Fortegra expired ~mid-2024<br>Roxana Rios 901-321-1124</div></div>
+  </div>
+  <div class="st">Renewal Calendar</div>
+  <div class="rl">
+    <div class="rh">Status Overview</div>
+    <div class="rr"><div class="dot d-a"></div><div class="re">Divando CO SFRs</div><div class="rc-r">State Farm · 13 props · Kevin Schult (303) 989-3847</div><div class="rd">Dec 15, 2025 → Dec 15, 2026</div><div class="badge b-a">ACTIVE</div></div>
+    <div class="rr"><div class="dot d-a"></div><div class="re">Donald — 4 Duplexes</div><div class="rc-r">Westfield Superior · 499841Y · Wren Arbuthnot 970-668-3500</div><div class="rd">Sep 20 → Sep 20, 2026</div><div class="badge b-a">ACTIVE</div></div>
+    <div class="rr"><div class="dot d-a"></div><div class="re">Yale — Townhomes</div><div class="rc-r">Acuity · ZM1786-01 · CRS Insurance / Nathan Fonseca</div><div class="rd">Feb 22, 2026 → Feb 22, 2027</div><div class="badge b-a">ACTIVE</div></div>
+    <div class="rr"><div class="dot d-a"></div><div class="re">Dorado Fourplex</div><div class="rc-r">Berkshire Hathaway 02PRM080318-06 · IMA Select 303-534-4567</div><div class="rd">Nov 6, 2025 → Nov 6, 2026</div><div class="badge b-a">ACTIVE</div></div>
+    <div class="rr"><div class="dot d-w"></div><div class="re">Memphis TN</div><div class="rc-r">Fortegra Specialty · 2 props · Roxana Rios 901-321-1124</div><div class="rd">Last: mid-2024</div><div class="badge b-w">VERIFY</div></div>
+  </div>
+</div>
+<div id="p-divando" class="pane">
+  <div class="st">✏️ Divando Renewal Card</div>
+  <div class="renewal-card">
+    <div class="rc-grid">
+      <div class="rf"><label>Carrier</label><div class="ev hi">State Farm Fire &amp; Casualty Company</div></div>
+      <div class="rf"><label>Policy Period</label><div class="ev editable ok" contenteditable="true" spellcheck="false">Dec 15, 2025 → Dec 15, 2026</div></div>
+      <div class="rf"><label>Annual Premium (13 props)</label><div class="ev editable" contenteditable="true" spellcheck="false">$34,630</div></div>
+      <div class="rf"><label>Monthly Payment</label><div class="ev editable" contenteditable="true" spellcheck="false">$2,885.83</div></div>
+      <div class="rf"><label>Deductible</label><div class="ev hi">1% of building value per property</div></div>
+      <div class="rf"><label>Payment Source</label><div class="ev editable" contenteditable="true" spellcheck="false">Auto-draft Divando acct · 2nd of month</div></div>
+      <div class="rf"><label>Agent</label><div class="ev hi">Kevin Schult Ins Agency Inc</div></div>
+      <div class="rf"><label>Agent Phone</label><div class="ev hi">(303) 989-3847 · (303) 989-3849</div></div>
+      <div class="rf"><label>Agent Email</label><div class="ev hi">kevin.schult.l4wu@statefarm.com</div></div>
+      <div class="rf"><label>Medical Payments</label><div class="ev hi">$1,000 per person</div></div>
+      <div class="rf"><label>Loss of Rents</label><div class="ev hi">Actual Loss Sustained</div></div>
+      <div class="rf"><label>Last Updated</label><div class="ev editable" contenteditable="true" spellcheck="false">Apr 2026</div></div>
+      <div class="rf"><label>Notes</label><div class="ev editable" contenteditable="true" spellcheck="false">13 SFRs — 11 Divando owned, 2 Dorado owned (Jamaica + Enid). Dorado credits $138/mo back to Divando. Stop Dec 2026.</div></div>
+      <div class="rf" style="grid-column:1/-1"><label>📎 Policy Documents — Paste Dropbox Link</label><div class="ev editable" contenteditable="true" spellcheck="false" id="db-divando" style="color:var(--accent)">Paste Dropbox link here...</div></div>
+    </div>
+    <div class="renewal-actions">
+      <button class="ra-btn ra-renew" onclick="startRenewal('divando')">🔄 Start Renewal</button>
+      <button class="ra-btn ra-save" onclick="saveDownload()">💾 Save &amp; Download</button>
+      <div class="ra-note">Click "Start Renewal" first — archives current numbers before you enter new ones.</div>
+    </div>
+  </div>
+  <div class="st">13 SFRs — Coverage Detail 2025–2026</div>
+  <div class="tw"><table>
+    <thead><tr><th>Address</th><th>Policy #</th><th>Building</th><th>Dwelling Ext.</th><th>Personal Prop</th><th>Deductible (1%)</th><th>Annual</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>1724 Boston St, Aurora CO 80010</td><td class="mn">96-E4-G680-1</td><td class="mn">$331,200</td><td class="mn">$39,500</td><td class="mn">$49,680</td><td class="mn">$3,312</td><td class="mn ta">$2,364</td><td class="tn">Liability $500K/$1M</td></tr>
+      <tr><td>2332 Oakland St, Aurora CO 80010</td><td class="mn">96-E4-G665-0</td><td class="mn">$420,100</td><td class="mn">$42,010</td><td class="mn">$63,015</td><td class="mn">$4,201</td><td class="mn ta">$2,612</td><td></td></tr>
+      <tr class="tw-wn"><td>2397 Jamaica St, Aurora CO 80010 [DORADO]</td><td class="mn">96-E4-G683-7</td><td class="mn">$378,800</td><td class="mn">$37,880</td><td class="mn">$56,820</td><td class="mn">$3,788</td><td class="mn ta">$2,425</td><td class="tn wn">Dorado→Divando $138/mo. Stop Dec 2026.</td></tr>
+      <tr><td>3225 Tucson St, Aurora CO 80011</td><td class="mn">96-E4-G667-4</td><td class="mn">$336,400</td><td class="mn">$33,640</td><td class="mn">$50,460</td><td class="mn">$3,364</td><td class="mn ta">$2,255</td><td></td></tr>
+      <tr><td>3630 Holly St, Denver CO 80207</td><td class="mn">96-E4-G670-0</td><td class="mn">$444,800</td><td class="mn">$44,480</td><td class="mn">$66,720</td><td class="mn">$4,448</td><td class="mn ta">$2,693</td><td></td></tr>
+      <tr class="tw-wn"><td>4641 Enid Way, Denver CO 80239 [DORADO]</td><td class="mn">96-E4-G684-9</td><td class="mn">$361,100</td><td class="mn">$36,110</td><td class="mn">$54,165</td><td class="mn">$3,611</td><td class="mn ta">$2,528</td><td class="tn wn">Dorado→Divando $138/mo. Stop Dec 2026.</td></tr>
+      <tr><td>4776 Blackhawk Way, Denver CO 80239</td><td class="mn">96-E4-G672-4</td><td class="mn">$525,500</td><td class="mn">$52,550</td><td class="mn">$78,825</td><td class="mn">$5,255</td><td class="mn ta">$3,320</td><td></td></tr>
+      <tr><td>5101 Crown Blvd, Denver CO 80239</td><td class="mn">96-E4-G673-6</td><td class="mn">$397,100</td><td class="mn">$39,710</td><td class="mn">$59,565</td><td class="mn">$3,971</td><td class="mn ta">$2,702</td><td></td></tr>
+      <tr><td>5538 Dearborn St, Denver CO 80239</td><td class="mn">96-E4-G675-1</td><td class="mn">$417,300</td><td class="mn">$41,730</td><td class="mn">$62,595</td><td class="mn">$4,173</td><td class="mn ta">$2,610</td><td></td></tr>
+      <tr><td>11795 E Virginia Dr, Aurora CO 80012</td><td class="mn">96-E4-G678-7</td><td class="mn">$378,800</td><td class="mn">$37,880</td><td class="mn">$56,820</td><td class="mn">$3,788</td><td class="mn ta">$2,443</td><td></td></tr>
+      <tr><td>14790 E 43rd Ave, Denver CO 80239</td><td class="mn">96-E4-G677-5</td><td class="mn">$384,500</td><td class="mn">$38,450</td><td class="mn">$57,675</td><td class="mn">$3,845</td><td class="mn ta">$2,642</td><td></td></tr>
+      <tr><td>15559 E Bates Ave, Aurora CO 80013</td><td class="mn">96-E4-G679-9</td><td class="mn">$393,400</td><td class="mn">$39,340</td><td class="mn">$59,010</td><td class="mn">$3,934</td><td class="mn ta">$2,507</td><td class="tn">Revised PDF pending from agent</td></tr>
+      <tr><td>15655 E 13th Ave, Aurora CO 80011</td><td class="mn">96-E4-G681-3</td><td class="mn">$618,900</td><td class="mn">$61,890</td><td class="mn">$92,835</td><td class="mn">$6,189</td><td class="mn ta">$3,529</td><td></td></tr>
+    </tbody>
+    <tfoot><tr><td colspan="6">TOTAL — 13 Properties · Kevin Schult (303) 989-3847</td><td>$34,630/yr · $2,885.83/mo</td><td></td></tr></tfoot>
+  </table></div>
+</div>
+<div id="p-dorado" class="pane">
+  <div class="st">✏️ Dorado Renewal Card — 1460 W. 41st Ave, Denver CO 80211</div>
+  <div class="renewal-card">
+    <div class="rc-grid">
+      <div class="rf"><label>Carrier</label><div class="ev hi">Berkshire Hathaway Homestate</div></div>
+      <div class="rf"><label>Policy Number</label><div class="ev editable" contenteditable="true" spellcheck="false">02PRM080318-06</div></div>
+      <div class="rf"><label>Policy Period</label><div class="ev editable ok" contenteditable="true" spellcheck="false">Nov 6, 2025 → Nov 6, 2026</div></div>
+      <div class="rf"><label>Annual Premium</label><div class="ev editable" contenteditable="true" spellcheck="false">$5,440</div></div>
+      <div class="rf"><label>Monthly Payment</label><div class="ev editable" contenteditable="true" spellcheck="false">$453.33</div></div>
+      <div class="rf"><label>Payment Source</label><div class="ev hi">Dorado LLC debit card · auto-drafted monthly</div></div>
+      <div class="rf"><label>Building Coverage</label><div class="ev hi">$775,000</div></div>
+      <div class="rf"><label>Business Income</label><div class="ev hi">$60,600</div></div>
+      <div class="rf"><label>Deductible — Standard</label><div class="ev editable" contenteditable="true" spellcheck="false">$2,500</div></div>
+      <div class="rf"><label>Deductible — Wind/Hail</label><div class="ev editable" contenteditable="true" spellcheck="false" style="color:var(--warn)">$15,500</div></div>
+      <div class="rf"><label>Liability Limits</label><div class="ev hi">$1M each occ · $2M aggregate<br>Fire Legal: $100K · Med: $5K</div></div>
+      <div class="rf"><label>Agent</label><div class="ev hi">Hannah Burford — IMA Select, LLC<br>(303) 615-7840 · hannah.burford@imacorp.com</div></div>
+      <div class="rf"><label>Mortgagees</label><div class="ev hi">ANB Bank ISAOA<br>Collegiate Peaks Bank · Div of Glacier Bank</div></div>
+      <div class="rf"><label>Billing Account #</label><div class="ev hi">240311</div></div>
+      <div class="rf"><label>Last Updated</label><div class="ev editable" contenteditable="true" spellcheck="false">Apr 2026</div></div>
+      <div class="rf" style="grid-column:1/-1"><label>📎 Policy Document — Paste Dropbox Link</label><div class="ev editable" contenteditable="true" spellcheck="false" id="db-dorado" style="color:var(--accent)">Paste Dropbox link here...</div></div>
+    </div>
+    <div class="renewal-actions">
+      <button class="ra-btn ra-renew" onclick="startRenewal('dorado')">🔄 Start Renewal</button>
+      <button class="ra-btn ra-save" onclick="saveDownload()">💾 Save &amp; Download</button>
+    </div>
+  </div>
+</div>
+<div id="p-yale" class="pane">
+  <div class="st">✏️ Yale LLC — 2991-2999 W Yale Ave · Renewal Card</div>
+  <div class="renewal-card">
+    <div class="rc-grid">
+      <div class="rf"><label>Named Insured</label><div class="ev hi">Yale Townhomes LLC</div></div>
+      <div class="rf"><label>Carrier</label><div class="ev hi">Acuity, A Mutual Insurance Company</div></div>
+      <div class="rf"><label>Policy Number</label><div class="ev editable" contenteditable="true" spellcheck="false">ZM1786-01</div></div>
+      <div class="rf"><label>Policy Period</label><div class="ev editable ok" contenteditable="true" spellcheck="false">Feb 22, 2026 → Feb 22, 2027</div></div>
+      <div class="rf"><label>Building Coverage</label><div class="ev editable" contenteditable="true" spellcheck="false">$1,900,799</div></div>
+      <div class="rf"><label>Personal Property</label><div class="ev hi">$65,862</div></div>
+      <div class="rf"><label>Annual Premium</label><div class="ev editable" contenteditable="true" spellcheck="false">$11,248</div></div>
+      <div class="rf"><label>Monthly Payment</label><div class="ev editable" contenteditable="true" spellcheck="false">$1,024.54 (11-pay · $1,024.56 down)</div></div>
+      <div class="rf"><label>Payment Source</label><div class="ev hi">Yale LLC dedicated acct · debit card · 24th of month</div></div>
+      <div class="rf"><label>Deductible — Standard</label><div class="ev editable" contenteditable="true" spellcheck="false">$5,000</div></div>
+      <div class="rf"><label>Deductible — Wind/Hail</label><div class="ev editable" contenteditable="true" spellcheck="false" style="color:var(--warn)">2% per building</div></div>
+      <div class="rf"><label>Liability (Bis-Pak)</label><div class="ev hi">$1M each occ · $3M aggregate<br>Products $3M · Premises Rented $300K · Medical $10K/person</div></div>
+      <div class="rf"><label>Liability (Excess)</label><div class="ev hi">$2M each occ · $2M aggregate · Hired/Nonowned Auto incl.</div></div>
+      <div class="rf"><label>Additional Named Insureds</label><div class="ev hi" style="color:var(--warn)">Nir Shay · Ron Moscovich</div></div>
+      <div class="rf"><label>Agent</label><div class="ev hi">Nathan Fonseca · CRS Insurance Brokerage · #7118-BL · 720-727-6049</div></div>
+      <div class="rf"><label>Last Updated</label><div class="ev editable" contenteditable="true" spellcheck="false">Apr 2026</div></div>
+      <div class="rf" style="grid-column:1/-1"><label>📎 Policy Document — Paste Dropbox Link</label><div class="ev editable" contenteditable="true" spellcheck="false" id="db-yale" style="color:var(--accent)">Paste Dropbox link here...</div></div>
+    </div>
+    <div class="renewal-actions">
+      <button class="ra-btn ra-renew" onclick="startRenewal('yale')">🔄 Start Renewal</button>
+      <button class="ra-btn ra-save" onclick="saveDownload()">💾 Save &amp; Download</button>
+    </div>
+  </div>
+</div>
+<div id="p-donald" class="pane">
+  <div class="st">✏️ Donald LLC — 4 Duplexes · Renewal Card</div>
+  <div class="renewal-card">
+    <div class="rc-grid">
+      <div class="rf"><label>Named Insured</label><div class="ev hi">5070 E Donald Ave Denver LLC</div></div>
+      <div class="rf"><label>Carrier</label><div class="ev hi">Westfield Superior Insurance</div></div>
+      <div class="rf"><label>Policy Number</label><div class="ev editable" contenteditable="true" spellcheck="false">499841Y</div></div>
+      <div class="rf"><label>Policy Period</label><div class="ev editable ok" contenteditable="true" spellcheck="false">Sep 20, 2025 → Sep 20, 2026</div></div>
+      <div class="rf"><label>Annual Premium</label><div class="ev editable" contenteditable="true" spellcheck="false">$14,530</div></div>
+      <div class="rf"><label>Monthly Payment</label><div class="ev editable" contenteditable="true" spellcheck="false">$1,210.84</div></div>
+      <div class="rf"><label>Payment Source</label><div class="ev hi">Donald LLC account · 2nd of month</div></div>
+      <div class="rf"><label>Coverage / Duplex</label><div class="ev hi">$1,125,500 ($562,750 × 2 units)</div></div>
+      <div class="rf"><label>Liability</label><div class="ev hi">$2M each occ · $4M aggregate · Products $4M · Premises Rented $1M · Medical: Excluded</div></div>
+      <div class="rf"><label>Deductible — Standard</label><div class="ev editable" contenteditable="true" spellcheck="false">$10,000</div></div>
+      <div class="rf"><label>Deductible — Wind/Hail</label><div class="ev hi">$0 — not applicable</div></div>
+      <div class="rf"><label>Mortgageholder</label><div class="ev hi">CBRE Loan Services Inc</div></div>
+      <div class="rf"><label>Additional Insured</label><div class="ev hi">Laureate LTD</div></div>
+      <div class="rf"><label>Agent</label><div class="ev hi">Wren Arbuthnot · Arrow Insurance Management · 970-668-3500 · warbuthnot@arrowinsurance.net</div></div>
+      <div class="rf"><label>Last Updated</label><div class="ev editable" contenteditable="true" spellcheck="false">Apr 2026</div></div>
+      <div class="rf" style="grid-column:1/-1"><label>📎 Policy Document — Paste Dropbox Link</label><div class="ev editable" contenteditable="true" spellcheck="false" id="db-donald" style="color:var(--accent)">Paste Dropbox link here...</div></div>
+    </div>
+    <div class="renewal-actions">
+      <button class="ra-btn ra-renew" onclick="startRenewal('donald')">🔄 Start Renewal</button>
+      <button class="ra-btn ra-save" onclick="saveDownload()">💾 Save &amp; Download</button>
+    </div>
+  </div>
+</div>
+<div id="p-archive" class="pane">
+  <div class="st">Archive — Expired Policies</div>
+  <div class="pc" style="opacity:.5">
+    <div class="pf"><label>State Farm (Dec 2024→Dec 2025)</label><div class="v ex">Kevin Schult · Divando $1,581 + Donald $1,063/mo · Canceled Sep 2025</div></div>
+    <div class="pf"><label>BH CO SFRs (Nov 2024→Nov 2025)</label><div class="v ex">02PRM080318-03 · IMA Select / Rosella Sheehan · 14 CO properties</div></div>
+    <div class="pf"><label>Memphis TN — VERIFY</label><div class="v wn">Fortegra expired mid-2024 · Roxana Rios 901-321-1124</div></div>
+  </div>
+</div>
+</div>
+
+<!-- AI CHAT -->
+<div class="ai-btn-wrap">
+  <button class="ai-btn" onclick="toggleAI()">🤖<div class="ai-tip">Ask me anything about this dashboard</div></button>
+  <div class="ai-label">AI Assistant<br>שאל אותי כל שאלה</div>
+</div>
+<div class="ai-panel" id="ai-panel">
+  <div class="ai-head"><div class="dot"></div><div class="ai-head-t">Insurance AI Assistant</div><button class="ai-close" onclick="toggleAI()">✕</button></div>
+  <div class="ai-msgs" id="ai-msgs">
+    <div class="ai-msg bot">👋 שלום! אני הסוכן החכם של Niron Noble Insurance.<br><br>Hello! Ask me anything about the policies, properties, premiums, renewal dates, agents and more.</div>
+  </div>
+  <div class="ai-input-row">
+    <textarea class="ai-input" id="ai-input" rows="1" placeholder="שאל שאלה / Ask a question..." onkeydown="aiKey(event)"></textarea>
+    <button class="ai-send" id="ai-send" onclick="aiSend()">➤</button>
+  </div>
+</div>
+
+<!-- PIN MODAL -->
+<div class="pin-bg" id="pin-bg">
+  <div class="pin-box">
+    <h3>🔑 Owner Access</h3>
+    <input class="pin-in" id="pin-in" type="password" maxlength="6" placeholder="····" onkeydown="if(event.key==='Enter') pinSubmit()">
+    <div class="pin-err" id="pin-err">❌ Wrong PIN</div>
+    <div class="pin-row"><button class="pin-ok" onclick="pinSubmit()">Enter</button><button class="pin-cancel" onclick="pinClose()">Cancel</button></div>
+  </div>
+</div>
+
+<!-- SAVE MODAL -->
+<div class="save-modal-bg" id="save-modal">
+  <div class="save-modal">
+    <h3>💾 Save Dashboard</h3>
+    <label class="sm-label">Who is saving? *</label>
+    <select id="save-initials" class="sm-select"><option value="">— Select —</option><option value="R.M">R.M — Ron Moscovich</option><option value="O.M">O.M — Oshrat Moscovich</option><option value="N.S">N.S — Nir Shay</option></select>
+    <label class="sm-label">Date Updated *</label>
+    <input type="date" id="save-date" class="sm-date">
+    <div id="sm-warn" class="sm-warn">⚠️ Please select who is saving and confirm the date.</div>
+    <div class="modal-btns"><button class="m-yes" onclick="confirmSave()">✓ Confirm &amp; Download</button><button class="m-no" onclick="closeSaveModal()">✕ Cancel</button></div>
+  </div>
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <h3>⚠️ Start Renewal</h3>
+    <p>This will <strong>archive the current policy numbers to history</strong> and clear the card for new data.<br><br><strong>This cannot be undone.</strong></p>
+    <div class="modal-btns"><button class="m-yes" onclick="confirmRenewal()">✓ Yes — Archive &amp; Continue</button><button class="m-no" onclick="cancelRenewal()">✕ Cancel</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const AI_SYSTEM=`You are an expert insurance assistant for Niron Noble LLC. Answer in Hebrew or English matching the user's language. Be concise and accurate.
+
+DIVANDO LLC — 13 CO SFRs (State Farm) Dec 15 2025-2026 | Annual $34,630 | Monthly $2,885.83 | Agent Kevin Schult (303)989-3847 kevin.schult.l4wu@statefarm.com | Deductible 1% per property | Medical $1,000/person | Loss of Rents: Actual Loss
+Properties: 1724 Boston St G680-1 $331,200 $2,364 liability $500K/$1M | 2332 Oakland G665-0 $420,100 $2,612 | 2397 Jamaica G683-7 $378,800 $2,425 DORADO | 3225 Tucson G667-4 $336,400 $2,255 | 3630 Holly G670-0 $444,800 $2,693 | 4641 Enid G684-9 $361,100 $2,528 DORADO | 4776 Blackhawk G672-4 $525,500 $3,320 | 5101 Crown G673-6 $397,100 $2,702 | 5538 Dearborn G675-1 $417,300 $2,610 | 11795 E Virginia G678-7 $378,800 $2,443 | 14790 E 43rd G677-5 $384,500 $2,642 | 15559 E Bates G679-9 $393,400 $2,507 | 15655 E 13th G681-3 $618,900 $3,529 | Dorado pays $138/mo to Divando for Jamaica+Enid. Stop Dec 2026.
+
+DORADO LLC — 1460 W 41st Ave Denver CO 80211 | Berkshire Hathaway 02PRM080318-06 | Nov 6 2025-2026 | Annual $5,440 | Monthly $453.33 | Building $775,000 | Biz Income $60,600 | Deductible $2,500 std / $15,500 wind | Liability $1M/$2M | Agent Hannah Burford IMA Select (303)615-7840 hannah.burford@imacorp.com | Mortgagees: ANB Bank ISAOA, Collegiate Peaks Bank
+
+DONALD LLC — 5060-5082 E Donald Ave Denver CO 80222 | Named Insured: 5070 E Donald Ave Denver LLC | Westfield Superior 499841Y | Sep 20 2025-2026 | Annual $14,530 | Monthly $1,210.84 | Coverage $562,750/building | Deductible $10,000 std / $0 wind | Liability $2M/$4M | Agent Wren Arbuthnot Arrow Insurance 970-668-3500 warbuthnot@arrowinsurance.net | Mortgageholder CBRE | Additional Insured Laureate LTD
+
+YALE LLC — 2991-2999 W Yale Ave Denver CO | Yale Townhomes LLC | Acuity ZM1786-01 | Feb 22 2026-2027 | Annual $11,248 | Monthly $1,024.54 | Building $1,900,799 | Deductible $5,000 std / 2% wind | Liability $1M/$3M Bis-Pak + $2M/$2M Excess | Additional Insureds: Nir Shay, Ron Moscovich | Agent Nathan Fonseca CRS Insurance 720-727-6049
+
+TOTAL MONTHLY: $5,574.54 | Next renewals: Sep 20 2026 Donald, Nov 6 2026 Dorado, Dec 15 2026 Divando, Feb 22 2027 Yale`;
+
+let aiHistory=[];
+
+function toggleAI(){
+  const p=document.getElementById('ai-panel');
+  p.classList.toggle('on');
+  if(p.classList.contains('on')) document.getElementById('ai-input').focus();
+}
+
+function aiKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSend();}}
+
+async function aiSend(){
+  const input=document.getElementById('ai-input');
+  const q=input.value.trim();
+  if(!q) return;
+  input.value='';
+  addMsg(q,'user');
+  const btn=document.getElementById('ai-send');
+  btn.disabled=true;
+  const thinking=addMsg('...','thinking');
+  aiHistory.push({role:'user',content:q});
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-calls':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:800,system:AI_SYSTEM,messages:aiHistory})
+    });
+    const data=await res.json();
+    if(!res.ok){thinking.remove();addMsg('Error: '+(data.error?.message||res.status),'bot');btn.disabled=false;return;}
+    const answer=data.content?.[0]?.text||'No response.';
+    thinking.remove();
+    addMsg(answer,'bot');
+    aiHistory.push({role:'assistant',content:answer});
+    if(aiHistory.length>20) aiHistory=aiHistory.slice(-20);
+  }catch(err){
+    thinking.remove();
+    addMsg('שגיאה / Connection error. Try again.','bot');
+  }
+  btn.disabled=false;
+  document.getElementById('ai-input').focus();
+}
+
+function addMsg(text,type){
+  const msgs=document.getElementById('ai-msgs');
+  const div=document.createElement('div');
+  div.className='ai-msg '+type;
+  div.innerHTML=text.replace(/\n/g,'<br>');
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return div;
+}
+
+function ownerLogin(){
+  document.getElementById('pin-in').value='';
+  document.getElementById('pin-err').style.display='none';
+  document.getElementById('pin-bg').classList.add('on');
+  setTimeout(()=>document.getElementById('pin-in').focus(),100);
+}
+function pinSubmit(){
+  const val=document.getElementById('pin-in').value;
+  if(val==='2703'){document.getElementById('pin-bg').classList.remove('on');document.getElementById('owner-panel').classList.add('on');}
+  else{document.getElementById('pin-err').style.display='block';document.getElementById('pin-in').value='';document.getElementById('pin-in').focus();}
+}
+function pinClose(){document.getElementById('pin-bg').classList.remove('on');}
+function closeOwner(){document.getElementById('owner-panel').classList.remove('on');}
+document.getElementById('pin-bg').addEventListener('click',function(e){if(e.target===this) pinClose();});
+
+function show(id,btn){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+document.getElementById('dt').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+
+function showToast(msg,warn){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  t.style.background=warn?'#f0a50022':'#00c97a22';
+  t.style.borderColor=warn?'var(--warn)':'var(--active)';
+  t.style.color=warn?'var(--warn)':'var(--active)';
+  setTimeout(()=>t.style.display='none',3200);
+}
+
+let _ent=null;
+function startRenewal(entity){
+  const card=document.getElementById('p-'+entity).querySelector('.renewal-card');
+  let hasData=false;
+  card.querySelectorAll('.ev.editable').forEach(el=>{const v=el.textContent.trim();if(v&&v!=='Paste Dropbox link here...') hasData=true;});
+  if(!hasData){showToast('⚠️ Card is already empty — enter new numbers directly',true);return;}
+  _ent=entity;
+  document.getElementById('modal').classList.add('on');
+}
+function cancelRenewal(){document.getElementById('modal').classList.remove('on');_ent=null;}
+function confirmRenewal(){
+  document.getElementById('modal').classList.remove('on');
+  const pane=document.getElementById('p-'+_ent);
+  const card=pane.querySelector('.renewal-card');
+  card.querySelectorAll('.ev.editable').forEach(el=>{
+    if(el.id&&el.id.startsWith('db-')) return;
+    el.textContent='';
+    el.style.borderColor='var(--warn)';
+  });
+  const first=card.querySelector('.ev.editable');
+  if(first) first.focus();
+  showToast('✓ Archived — enter new renewal numbers');
+  _ent=null;
+}
+
+function saveDownload(){
+  const today=new Date().toISOString().slice(0,10);
+  document.getElementById('save-date').value=today;
+  document.getElementById('save-initials').value='';
+  document.getElementById('sm-warn').style.display='none';
+  document.getElementById('save-modal').classList.add('on');
+}
+function closeSaveModal(){document.getElementById('save-modal').classList.remove('on');}
+function confirmSave(){
+  const initials=document.getElementById('save-initials').value;
+  const date=document.getElementById('save-date').value;
+  if(!initials||!date){document.getElementById('sm-warn').style.display='block';return;}
+  document.getElementById('save-modal').classList.remove('on');
+  const blob=new Blob(['<!DOCTYPE html>\n'+document.documentElement.outerHTML],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Niron_Noble_Insurance_'+date+'_'+initials.replace('.','')+'_.html';
+  a.click();
+  showToast('✓ Saved by '+initials+' on '+date);
+}
+
+function doSearch(q){
+  q=q.toLowerCase().trim();
+  if(!q){document.querySelectorAll('tbody tr').forEach(r=>r.classList.remove('row-hide','row-match'));return;}
+  document.querySelectorAll('tbody tr').forEach(r=>{
+    const txt=r.textContent.toLowerCase();
+    if(txt.includes(q)){r.classList.remove('row-hide');r.classList.add('row-match');}
+    else{r.classList.add('row-hide');r.classList.remove('row-match');}
+  });
+}
+
+document.getElementById('save-modal').addEventListener('click',function(e){if(e.target===this) closeSaveModal();});
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this) cancelRenewal();});
+</script>
+</body>
+</html>
