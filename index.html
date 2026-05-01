@@ -6,7 +6,7 @@
 <title>Niron Noble | Insurance Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#090d12;--bg-card:#111620;--bg-hover:#182030;--border:#1e2d42;--accent:#00BFFF;--accent-d:#00BFFF18;--glow:0 0 22px #00BFFF33;--text:#ccd9ea;--muted:#4e6d8c;--active:#00c97a;--warn:#f0a500;--expired:#ff4455;--edit:#f0a500;--edit-bg:#f0a50010;--edit-border:#f0a50055;--fh:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;--fm:'IBM Plex Mono',monospace}
+:root{--bg:#090d12;--bg-card:#111620;--bg-hhover:#182030;--border:#1e2d42;--accent:#00BFFF;--accent-d:#00BFFF18;--glow:0 0 22px #00BFFF33;--text:#ccd9ea;--muted:#4e6d8c;--active:#00c97a;--warn:#f0a500;--expired:#ff4455;--edit:#f0a500;--edit-bg:#f0a50010;--edit-border:#f0a50055;--fh:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;--fm:'IBM Plex Mono',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;overflow-x:hidden}
 
@@ -807,7 +807,7 @@ async function aiSend(){
   const thinking=addMsg('...','thinking');
   aiHistory.push({role:'user',content:q});
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch('/functions/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYSTEM,messages:aiHistory})
