@@ -820,20 +820,21 @@ async function aiSend(){
   const thinking=addMsg('...','thinking');
   aiHistory.push({role:'user',content:q});
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYSTEM,messages:aiHistory})
     });
+    if(!res.ok) throw new Error('HTTP '+res.status);
     const data=await res.json();
-    const answer=data.content?.[0]?.text||'Sorry, no response.';
+    const answer=data.content?.[0]?.text||data.error||'Sorry, no response.';
     thinking.remove();
     addMsg(answer,'bot');
     aiHistory.push({role:'assistant',content:answer});
     if(aiHistory.length>20) aiHistory=aiHistory.slice(-20);
   }catch(err){
     thinking.remove();
-    addMsg('שגיאה / Connection error. Try again.','bot');
+    addMsg('שגיאה / Connection error: '+err.message+'<br><br>Make sure you are viewing this on <b>niron-noble-insurance.moscoron.workers.dev</b> — chatbot only works there, not from GitHub Pages or local files.','bot');
   }
   btn.disabled=false;
   document.getElementById('ai-input').focus();
